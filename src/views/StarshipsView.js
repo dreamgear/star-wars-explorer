@@ -4,10 +4,11 @@ import DataTable from '../components/DataTable.js';
 import PaginationControl from '../components/PaginationControl.js';
 import LoadingSpinner from '../components/LoadingSpinner.js';
 import SearchBar from '../components/SearchBar.js';
+import RelationList from '../components/RelationList.js';
 
 export default defineComponent({
     name: 'StarshipsView',
-    components: { DataTable, PaginationControl, LoadingSpinner, SearchBar },
+    components: { DataTable, PaginationControl, LoadingSpinner, SearchBar, RelationList },
     setup() {
         const starships = ref([]);
         const loading = ref(false);
@@ -85,7 +86,12 @@ export default defineComponent({
       </div>
       
       <div v-else>
-        <DataTable :headers="headers" :items="starships" :loading="loading" />
+        <DataTable :headers="headers" :items="starships" :loading="loading" expandable>
+           <template #expanded="{ item }">
+              <RelationList title="Pilots" :urls="item.pilots" />
+              <RelationList title="Films" :urls="item.films" />
+           </template>
+        </DataTable>
         <PaginationControl 
           :hasNext="!!nextUrl" 
           :hasPrev="!!prevUrl" 

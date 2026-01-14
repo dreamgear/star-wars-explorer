@@ -161,8 +161,71 @@ h1 {
 }
 
 .fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+  animation: fadeIn 0.3s ease-out forwards;
 }
+
+/* Relations / Expanded Row */
+.expanded-row-content {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.relation-group h4 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.4rem;
+}
+
+.relation-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.relation-list li {
+  margin-bottom: 0.4rem;
+}
+
+.relation-link {
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s, padding-left 0.2s;
+  display: block;
+}
+
+.relation-link:hover {
+  color: var(--primary);
+  padding-left: 5px;
+}
+
+.relation-loading {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.toggle-icon {
+  cursor: pointer;
+  transition: transform 0.3s;
+  display: inline-block;
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+.toggle-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 
 .page-enter-active,
 .page-leave-active {

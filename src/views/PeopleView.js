@@ -4,10 +4,11 @@ import DataTable from '../components/DataTable.js';
 import PaginationControl from '../components/PaginationControl.js';
 import LoadingSpinner from '../components/LoadingSpinner.js';
 import SearchBar from '../components/SearchBar.js';
+import RelationList from '../components/RelationList.js';
 
 export default defineComponent({
     name: 'PeopleView',
-    components: { DataTable, PaginationControl, LoadingSpinner, SearchBar },
+    components: { DataTable, PaginationControl, LoadingSpinner, SearchBar, RelationList },
     setup() {
         const people = ref([]);
         const loading = ref(false);
@@ -85,7 +86,15 @@ export default defineComponent({
       </div>
       
       <div v-else>
-        <DataTable :headers="headers" :items="people" :loading="loading" />
+        <DataTable :headers="headers" :items="people" :loading="loading" expandable>
+           <template #expanded="{ item }">
+              <RelationList title="Homeworld" :urls="item.homeworld" />
+              <RelationList title="Films" :urls="item.films" />
+              <RelationList title="Species" :urls="item.species" />
+              <RelationList title="Starships" :urls="item.starships" />
+              <RelationList title="Vehicles" :urls="item.vehicles" />
+           </template>
+        </DataTable>
         <PaginationControl 
           :hasNext="!!nextUrl" 
           :hasPrev="!!prevUrl" 
