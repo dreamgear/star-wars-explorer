@@ -1,6 +1,6 @@
 # Project To-Do List
 
-- [ ] Add support for the remaining three top-level objects: films, species and vehicles
+- [x] Add support for the remaining three top-level objects: films, species and vehicles
   - films: https://swapi.py4e.com/api/films/
   - species: https://swapi.py4e.com/api/species/
   - vehicles: https://swapi.py4e.com/api/vehicles/
