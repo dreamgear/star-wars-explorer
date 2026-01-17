@@ -72,7 +72,7 @@ export default defineComponent({
         <div v-if="loading" class="relation-loading">Loading...</div>
         <ul v-else class="relation-list">
             <li v-for="item in items" :key="item.route + item.id">
-                <router-link :to="{ path: item.route, query: { search: item.name } }" class="relation-link">
+                <router-link :to="{ path: item.route, query: { search: item.name, autoExpand: 'true' } }" class="relation-link">
                     {{ item.name }}
                 </router-link>
             </li>

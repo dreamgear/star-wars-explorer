@@ -1,4 +1,5 @@
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { swapi } from '../services/swapi.js';
 import DataTable from '../components/DataTable.js';
 import PaginationControl from '../components/PaginationControl.js';
@@ -10,13 +11,16 @@ export default defineComponent({
     name: 'VehiclesView',
     components: { DataTable, PaginationControl, LoadingSpinner, SearchBar, RelationList },
     setup() {
+        const route = useRoute();
         const vehicles = ref([]);
         const loading = ref(false);
         const nextUrl = ref(null);
         const prevUrl = ref(null);
         const error = ref(null);
         const page = ref(1);
-        const searchQuery = ref('');
+        const searchQuery = ref(route.query.search || '');
+
+        const autoExpand = computed(() => route.query.autoExpand === 'true');
 
         const headers = [
             { key: 'name', label: 'Name' },
@@ -61,6 +65,14 @@ export default defineComponent({
             loadData(null, 1);
         };
 
+        watch(() => route.query, (newQuery) => {
+            if (newQuery.search !== undefined && newQuery.search !== searchQuery.value) {
+                searchQuery.value = newQuery.search || '';
+                page.value = 1;
+                loadData(null, 1);
+            }
+        });
+
         return {
             vehicles,
             loading,
@@ -70,8 +82,10 @@ export default defineComponent({
             handleNext,
             handlePrev,
             handleSearch,
+            handleSearch,
             searchQuery,
-            error
+            error,
+            autoExpand
         };
     },
     template: `
@@ -86,7 +100,7 @@ export default defineComponent({
       </div>
       
       <div v-else>
-        <DataTable :headers="headers" :items="vehicles" :loading="loading" expandable>
+        <DataTable :headers="headers" :items="vehicles" :loading="loading" expandable :autoExpand="autoExpand">
            <template #expanded="{ item }">
               <RelationList title="Pilots" :urls="item.pilots" />
               <RelationList title="Films" :urls="item.films" />

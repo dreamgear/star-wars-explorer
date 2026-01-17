@@ -8,6 +8,9 @@
 - [x] Handle relations between People, Planets, Starships, Films, Species, and Vehicles
 
 - [x] Make the app mobile-friendly
+- [x] Auto-expand drill-down when navigating from a relation
+  - Update RelationList to pass `autoExpand=true` in query.
+  - Update DataTable to automatically expand if `autoExpand` prop is present and there is only 1 item.
   - Optimize layout for smaller screens (Pixel 9 viewport ~412px).
   - Adjust padding and font sizes.
   - Ensure data tables are scrollable or stacked on mobile.

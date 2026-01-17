@@ -1,4 +1,4 @@
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, watch } from 'vue';
 
 export default defineComponent({
   name: 'DataTable',
@@ -12,12 +12,19 @@ export default defineComponent({
       required: true
     },
     loading: Boolean,
-    expandable: Boolean
+    expandable: Boolean,
+    autoExpand: Boolean
   },
   setup(props) {
     const sortKey = ref(null);
     const sortOrder = ref('asc'); // 'asc' or 'desc'
     const expandedIndex = ref(-1);
+
+    watch(() => props.items, (newItems) => {
+      if (props.autoExpand && newItems.length === 1) {
+        expandedIndex.value = 0;
+      }
+    }, { immediate: true });
 
     const toggleExpand = (index) => {
       if (expandedIndex.value === index) {
