@@ -15,6 +15,9 @@ fi
 
 echo "### Using command: $DC_CMD"
 
+echo "### Cleaning up existing services ..."
+$DC_CMD down
+
 domains=(one.dreamgearweb.com)
 rsa_key_size=4096
 data_path="./certbot"
