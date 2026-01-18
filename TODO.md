@@ -9,6 +9,11 @@
 
 - [x] Make the app mobile-friendly
 - [x] Auto-expand drill-down when navigating from a relation
+
+- [ ] SSL support in deployment
+  - Use Docker Compose to orchestrate Nginx and Certbot.
+  - Configure Nginx for HTTP->HTTPS redirection and SSL termination.
+  - Use Certbot sidecar for certificate renewal.
   - Update RelationList to pass `autoExpand=true` in query.
   - Update DataTable to automatically expand if `autoExpand` prop is present and there is only 1 item.
   - Optimize layout for smaller screens (Pixel 9 viewport ~412px).
