@@ -1,9 +1,19 @@
 #!/bin/bash
 
-if ! docker compose version > /dev/null 2>&1; then
-  echo 'Error: docker compose is not available.' >&2
-  exit 1
+# Determine Docker Compose command
+DC_CMD=""
+if docker compose version > /dev/null 2>&1; then
+    DC_CMD="docker compose"
+elif command -v docker-compose > /dev/null 2>&1; then
+    DC_CMD="docker-compose"
+else
+    echo "### 'docker compose' not found. Downloading standalone binary..."
+    curl -SL https://github.com/docker/compose/releases/download/v2.24.1/docker-compose-linux-x86_64 -o docker-compose
+    chmod +x docker-compose
+    DC_CMD="./docker-compose"
 fi
+
+echo "### Using command: $DC_CMD"
 
 domains=(one.dreamgearweb.com)
 rsa_key_size=4096
@@ -28,17 +38,17 @@ fi
 echo "### Creating dummy certificate for $domains ..."
 path="/etc/letsencrypt/live/$domains"
 mkdir -p "$data_path/conf/live/$domains"
-docker compose run --rm --entrypoint "\
+$DC_CMD run --rm --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:4096 -days 1\
     -keyout '$path/privkey.pem' \
     -out '$path/fullchain.pem' \
     -subj '/CN=localhost'" certbot
 
 echo "### Starting nginx ..."
-docker compose up --force-recreate -d web
+$DC_CMD up --force-recreate -d web
 
 echo "### Deleting dummy certificate ..."
-docker compose run --rm --entrypoint "\
+$DC_CMD run --rm --entrypoint "\
   rm -Rf /etc/letsencrypt/live/$domains && \
   rm -Rf /etc/letsencrypt/archive/$domains && \
   rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
@@ -58,7 +68,7 @@ esac
 # Enable staging mode if needed
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
-docker compose run --rm --entrypoint "\
+$DC_CMD run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
     $email_arg \
@@ -68,4 +78,4 @@ docker compose run --rm --entrypoint "\
     --force-renewal" certbot
 
 echo "### Reloading nginx ..."
-docker compose exec web nginx -s reload
+$DC_CMD exec web nginx -s reload
