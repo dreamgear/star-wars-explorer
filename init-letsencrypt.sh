@@ -68,6 +68,9 @@ esac
 # Enable staging mode if needed
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
+echo "### Waiting for Nginx to start ..."
+sleep 5
+
 $DC_CMD run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
@@ -75,6 +78,7 @@ $DC_CMD run --rm --entrypoint "\
     $domain_args \
     --rsa-key-size $rsa_key_size \
     --agree-tos \
+    --non-interactive \
     --force-renewal" certbot
 
 echo "### Reloading nginx ..."
