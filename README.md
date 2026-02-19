@@ -20,18 +20,28 @@ Requires [Node.js](https://nodejs.org/).
 
 ## Deployment
 
-### Docker (Recommended)
-You can containerize this application with Docker.
+### Prerequisites
+This app runs behind a **Traefik reverse proxy** for SSL and routing.
+Traefik configuration lives in a separate repo: [`dreamgear/gopher`](https://github.com/dreamgear/gopher).
+Ensure Traefik is running and the `proxy-net` Docker network exists before deploying this app.
 
-1.  **Build the image**:
-    ```bash
-    docker build -t star-wars-explorer .
-    ```
-2.  **Run the container**:
-    ```bash
-    docker run -d -p 8080:80 star-wars-explorer
-    ```
-    Access at `http://localhost:8080`.
+### Docker Compose (Recommended)
+
+```bash
+docker compose up -d --build
+```
+
+The app registers itself with Traefik via Docker labels in `docker-compose.yml`.
+It will be available at `https://one.dreamgearweb.com`.
+
+### Standalone Docker (without Traefik)
+
+```bash
+docker build -t star-wars-explorer .
+docker run -d -p 8080:80 star-wars-explorer
+```
+
+Access at `http://localhost:8080`.
 
 ### Manual Deployment (Nginx/Apache)
 Simply copy all files in this directory to your web server's root directory (e.g., `/var/www/html`).
