@@ -1,8 +1,7 @@
-version: '3'
-
 services:
   web:
-    build: .
+    image: ghcr.io/dreamgear/star-wars-explorer:latest
+    container_name: star-wars-explorer
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.starwars.rule=Host(`one.dreamgearweb.com`)"
